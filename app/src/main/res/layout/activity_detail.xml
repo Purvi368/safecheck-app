@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="16dp">
+
+        <TextView
+            android:id="@+id/tvDetailTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Safety Check Details"
+            android:textSize="22sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/tvDetailDate"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:text="Date: 20/04/2026" />
+
+        <TextView
+            android:id="@+id/tvDetailVehicle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="Vehicle: AB12 XYZ" />
+
+        <TextView
+            android:id="@+id/tvDefectHeading"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Defects"
+            android:textStyle="bold"
+            android:textSize="18sp"
+            android:layout_marginTop="20dp" />
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerViewDefects"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginTop="8dp" />
+
+        <Button
+            android:id="@+id/btnAddDefect"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add New Defect"
+            android:layout_marginTop="16dp" />
+
+        <Button
+            android:id="@+id/btnEmailReport"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Email Report"
+            android:layout_marginTop="10dp" />
+
+        <Button
+            android:id="@+id/btnDeleteCheck"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Delete Check"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+</ScrollView>
