@@ -11,7 +11,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.safecheck.app.R;
 import com.safecheck.app.adapters.SafetyCheckAdapter;
-import com.safecheck.app.model.SafetyCheck;
+import com.safecheck.app.data.SafetyCheck;
 import com.safecheck.app.viewmodel.SafetyCheckViewModel;
 
 import java.util.HashMap;
@@ -22,8 +22,6 @@ public class MainActivity extends AppCompatActivity {
 
     private SafetyCheckViewModel viewModel;
     private SafetyCheckAdapter adapter;
-
-    // stores defect count for each check
     private final Map<Integer, Integer> defectCountMap = new HashMap<>();
 
     public static final String EXTRA_CHECK_ID = "checkId";
@@ -33,11 +31,9 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        // get views
         RecyclerView recyclerView = findViewById(R.id.recyclerViewChecks);
         Button btnAddCheck = findViewById(R.id.btnAddCheck);
 
-        // setup RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         adapter = new SafetyCheckAdapter(defectCountMap, safetyCheck -> {
@@ -48,27 +44,32 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
-        // ViewModel
         viewModel = new ViewModelProvider(this).get(SafetyCheckViewModel.class);
 
-        // observe data
-        viewModel.getAllChecks().observe(this, this::updateRecyclerData);
-
-        // Add Check button
         btnAddCheck.setOnClickListener(v -> {
             Intent intent = new Intent(MainActivity.this, AddSafetyCheckActivity.class);
             startActivity(intent);
         });
     }
 
-    private void updateRecyclerData(List<SafetyCheck> safetyChecks) {
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadChecks();
+    }
+
+    private void loadChecks() {
+        List<SafetyCheck> safetyChecks = viewModel.getAllChecks();
         defectCountMap.clear();
 
-        for (SafetyCheck check : safetyChecks) {
-            int count = viewModel.getDefectCountForCheck(check.getCheckId());
-            defectCountMap.put(check.getCheckId(), count);
+        if (safetyChecks != null) {
+            for (SafetyCheck check : safetyChecks) {
+                int count = viewModel.getDefectCountForCheck(check.getCheckId());
+                defectCountMap.put(check.getCheckId(), count);
+            }
         }
 
         adapter.setSafetyChecks(safetyChecks);
+        adapter.notifyDataSetChanged();
     }
 }

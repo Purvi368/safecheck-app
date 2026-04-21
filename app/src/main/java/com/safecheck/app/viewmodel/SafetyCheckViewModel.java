@@ -1,19 +1,26 @@
 package com.safecheck.app.viewmodel;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-import com.safecheck.app.model.Defect;
-import com.safecheck.app.model.SafetyCheck;
-import com.safecheck.app.repository.SafetyRepository;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+
+import com.safecheck.app.data.Defect;
+import com.safecheck.app.data.SafetyCheck;
+import com.safecheck.app.data.SafetyRepository;
 
 import java.util.List;
 
-public class SafetyCheckViewModel extends ViewModel {
+public class SafetyCheckViewModel extends AndroidViewModel {
 
-    private final SafetyRepository repository = SafetyRepository.getInstance();
+    private final SafetyRepository repository;
 
-    public LiveData<List<SafetyCheck>> getAllChecks() {
+    public SafetyCheckViewModel(@NonNull Application application) {
+        super(application);
+        repository = SafetyRepository.getInstance(application);
+    }
+
+    public List<SafetyCheck> getAllChecks() {
         return repository.getAllChecks();
     }
 
@@ -34,7 +41,10 @@ public class SafetyCheckViewModel extends ViewModel {
     }
 
     public void deleteSafetyCheck(int checkId) {
-        repository.deleteSafetyCheck(checkId);
+        SafetyCheck safetyCheck = repository.getCheckById(checkId);
+        if (safetyCheck != null) {
+            repository.deleteSafetyCheck(safetyCheck);
+        }
     }
 
     public int getDefectCountForCheck(int checkId) {
