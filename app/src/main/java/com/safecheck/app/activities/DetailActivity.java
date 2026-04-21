@@ -14,8 +14,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.safecheck.app.R;
 import com.safecheck.app.adapters.DefectAdapter;
-import com.safecheck.app.model.Defect;
-import com.safecheck.app.model.SafetyCheck;
+import com.safecheck.app.data.Defect;
+import com.safecheck.app.data.SafetyCheck;
 import com.safecheck.app.viewmodel.SafetyCheckViewModel;
 
 import java.util.List;
