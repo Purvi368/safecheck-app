@@ -4,9 +4,11 @@ import android.app.Application;
 
 import androidx.annotation.NonNull;
 import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
 
 import com.safecheck.app.data.Defect;
 import com.safecheck.app.data.SafetyCheck;
+import com.safecheck.app.data.SafetyCheckWithDefects;
 import com.safecheck.app.data.SafetyRepository;
 
 import java.util.List;
@@ -20,16 +22,24 @@ public class SafetyCheckViewModel extends AndroidViewModel {
         repository = SafetyRepository.getInstance(application);
     }
 
-    public List<SafetyCheck> getAllChecks() {
+    public LiveData<List<SafetyCheck>> getAllChecks() {
         return repository.getAllChecks();
     }
 
-    public SafetyCheck getCheckById(int checkId) {
+    public LiveData<SafetyCheck> getCheckById(int checkId) {
         return repository.getCheckById(checkId);
     }
 
-    public List<Defect> getDefectsForCheck(int checkId) {
+    public LiveData<List<Defect>> getDefectsForCheck(int checkId) {
         return repository.getDefectsForCheck(checkId);
+    }
+
+    public LiveData<Integer> getDefectCountForCheck(int checkId) {
+        return repository.getDefectCountForCheck(checkId);
+    }
+
+    public LiveData<SafetyCheckWithDefects> getSafetyCheckWithDefects(int checkId) {
+        return repository.getSafetyCheckWithDefects(checkId);
     }
 
     public void addSafetyCheck(String date, String vehicleRegistration) {
@@ -41,13 +51,6 @@ public class SafetyCheckViewModel extends AndroidViewModel {
     }
 
     public void deleteSafetyCheck(int checkId) {
-        SafetyCheck safetyCheck = repository.getCheckById(checkId);
-        if (safetyCheck != null) {
-            repository.deleteSafetyCheck(safetyCheck);
-        }
-    }
-
-    public int getDefectCountForCheck(int checkId) {
-        return repository.getDefectCountForCheck(checkId);
+        repository.deleteSafetyCheck(checkId);
     }
 }

@@ -1,8 +1,8 @@
 package com.safecheck.app.data;
 
 import androidx.room.Entity;
-import androidx.room.ForeignKey;
 import androidx.room.PrimaryKey;
+import androidx.room.ForeignKey;
 
 @Entity(
         foreignKeys = @ForeignKey(
@@ -15,20 +15,12 @@ import androidx.room.PrimaryKey;
 public class Defect {
 
     @PrimaryKey(autoGenerate = true)
-    private int defectId;
+    public int defectId;
 
-    private String description;
-    private String severity;
-    private int checkOwnerId;
+    public String description;
+    public String severity;
 
-    public Defect() {
-    }
-
-    public Defect(String description, String severity, int checkOwnerId) {
-        this.description = description;
-        this.severity = severity;
-        this.checkOwnerId = checkOwnerId;
-    }
+    public int checkOwnerId;
 
     public int getDefectId() {
         return defectId;
@@ -54,16 +46,12 @@ public class Defect {
         this.severity = severity;
     }
 
-    public int getCheckOwnerId() {
-        return checkOwnerId;
-    }
-
-    public void setCheckOwnerId(int checkOwnerId) {
-        this.checkOwnerId = checkOwnerId;
-    }
-
-
+    // IMPORTANT: UI expects getCheckId(), not checkOwnerId
     public int getCheckId() {
         return checkOwnerId;
+    }
+
+    public void setCheckId(int checkId) {
+        this.checkOwnerId = checkId;
     }
 }

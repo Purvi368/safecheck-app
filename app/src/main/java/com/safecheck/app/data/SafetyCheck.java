@@ -7,22 +7,12 @@ import androidx.room.PrimaryKey;
 public class SafetyCheck {
 
     @PrimaryKey(autoGenerate = true)
-    private int checkId;
+    public int checkId;
 
-    private String date;
-    private String vehicleRegistration;
-    private String driverName;
-    private String overallStatus;
-
-    public SafetyCheck() {
-    }
-
-    public SafetyCheck(String date, String vehicleRegistration, String driverName, String overallStatus) {
-        this.date = date;
-        this.vehicleRegistration = vehicleRegistration;
-        this.driverName = driverName;
-        this.overallStatus = overallStatus;
-    }
+    public String date;
+    public String vehicleRegistration;
+    public String driverName;
+    public String overallStatus;
 
     public int getCheckId() {
         return checkId;
