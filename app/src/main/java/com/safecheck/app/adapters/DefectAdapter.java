@@ -11,44 +11,48 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.safecheck.app.R;
 import com.safecheck.app.data.Defect;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DefectAdapter extends RecyclerView.Adapter<DefectAdapter.DefectViewHolder> {
 
-    private List<Defect> defectList;
+    private List<Defect> defects = new ArrayList<>();
 
-    public DefectAdapter(List<Defect> defectList) {
-        this.defectList = defectList;
+    public DefectAdapter() {
+    }
+
+    public void setDefects(List<Defect> defects) {
+        this.defects = defects;
+        notifyDataSetChanged();
     }
 
     @NonNull
     @Override
     public DefectViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.item_defect, parent, false);
+        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_defect, parent, false);
         return new DefectViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(@NonNull DefectViewHolder holder, int position) {
-        Defect defect = defectList.get(position);
-
-        String defectText = "Defect: " + defect.getDescription() + "\nSeverity: " + defect.getSeverity();
-        holder.tvDefectItem.setText(defectText);
+        Defect defect = defects.get(position);
+        holder.tvDescription.setText(defect.getDescription());
+        holder.tvSeverity.setText("Severity: " + defect.getSeverity());
     }
 
     @Override
     public int getItemCount() {
-        return defectList == null ? 0 : defectList.size();
+        return defects.size();
     }
 
-    public static class DefectViewHolder extends RecyclerView.ViewHolder {
-
-        TextView tvDefectItem;
+    static class DefectViewHolder extends RecyclerView.ViewHolder {
+        TextView tvDescription;
+        TextView tvSeverity;
 
         public DefectViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvDefectItem = itemView.findViewById(R.id.tvDefectItem);
+            tvDescription = itemView.findViewById(R.id.tvDefectDescription);
+            tvSeverity = itemView.findViewById(R.id.tvDefectSeverity);
         }
     }
 }
