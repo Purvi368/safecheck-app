@@ -1,3 +1,26 @@
 <resources>
     <string name="app_name">SafeCheck</string>
+
+    <string name="dashboard_title">Safety Checks</string>
+    <string name="dashboard_subtitle">Manage vehicle safety inspections</string>
+    <string name="add_safety_check">Add Safety Check</string>
+
+    <string name="detail_title">Check Details</string>
+    <string name="defects_title">Reported Defects</string>
+    <string name="add_defect">Add Defect</string>
+    <string name="delete_check">Delete Check</string>
+    <string name="email_report">Email Report</string>
+
+    <string name="add_defect_title">Add New Defect</string>
+    <string name="add_defect_subtitle">Record any issue found during the inspection</string>
+    <string name="defect_hint">Enter defect description</string>
+    <string name="save_defect">Save Defect</string>
+
+    <string name="vehicle_format">Vehicle: %1$s</string>
+    <string name="date_format">Date: %1$s</string>
+    <string name="defects_format">Defects: %1$d</string>
+
+    <string name="sample_vehicle">Vehicle Registration</string>
+    <string name="sample_date">Date</string>
+    <string name="sample_defects">Defects</string>
 </resources>

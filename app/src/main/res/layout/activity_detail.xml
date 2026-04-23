@@ -1,71 +1,100 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/backgroundLight"
+    android:orientation="vertical"
+    android:padding="20dp"
+    tools:context=".activities.DetailActivity">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/detail_title"
+        android:textColor="@color/textPrimary"
+        android:textSize="28sp"
+        android:textStyle="bold" />
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_marginTop="18dp"
+        android:background="@drawable/bg_card"
         android:orientation="vertical"
-        android:padding="16dp">
+        android:padding="18dp">
 
         <TextView
-            android:id="@+id/tvDetailTitle"
-            android:layout_width="wrap_content"
+            android:id="@+id/tvDetailVehicle"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Safety Check Details"
-            android:textSize="22sp"
+            android:text="Vehicle"
+            android:textColor="@color/textPrimary"
+            android:textSize="20sp"
             android:textStyle="bold" />
 
         <TextView
             android:id="@+id/tvDetailDate"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="Date: 20/04/2026" />
-
-        <TextView
-            android:id="@+id/tvDetailVehicle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="Vehicle: AB12 XYZ" />
-
-        <TextView
-            android:id="@+id/tvDefectHeading"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Defects"
-            android:textStyle="bold"
-            android:textSize="18sp"
-            android:layout_marginTop="20dp" />
-
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerViewDefects"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:layout_marginTop="8dp" />
-
-        <Button
-            android:id="@+id/btnAddDefect"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Add New Defect"
-            android:layout_marginTop="16dp" />
-
-        <Button
-            android:id="@+id/btnEmailReport"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Email Report"
-            android:layout_marginTop="10dp" />
-
-        <Button
-            android:id="@+id/btnDeleteCheck"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Delete Check"
-            android:layout_marginTop="10dp" />
+            android:layout_marginTop="10dp"
+            android:text="Date"
+            android:textColor="@color/textSecondary"
+            android:textSize="15sp" />
     </LinearLayout>
 
-</ScrollView>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="22dp"
+        android:text="@string/defects_title"
+        android:textColor="@color/textPrimary"
+        android:textSize="18sp"
+        android:textStyle="bold" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewDefects"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginTop="12dp"
+        android:layout_weight="1"
+        android:clipToPadding="false"
+        android:paddingBottom="12dp" />
+
+    <Button
+        android:id="@+id/btnAddDefect"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/bg_primary_button"
+        android:text="@string/add_defect"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnEmailReport"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_secondary_button"
+        android:text="@string/email_report"
+        android:textAllCaps="false"
+        android:textColor="@color/textPrimary"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+    <Button
+        android:id="@+id/btnDeleteCheck"
+        android:layout_width="match_parent"
+        android:layout_height="54dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/bg_danger_button"
+        android:text="@string/delete_check"
+        android:textAllCaps="false"
+        android:textColor="@android:color/white"
+        android:textSize="15sp"
+        android:textStyle="bold" />
+
+</LinearLayout>

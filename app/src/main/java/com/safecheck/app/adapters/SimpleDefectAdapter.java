@@ -9,16 +9,15 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.safecheck.app.R;
-import com.safecheck.app.data.Defect;
 
 import java.util.List;
 
-public class DefectAdapter extends RecyclerView.Adapter<DefectAdapter.DefectViewHolder> {
+public class SimpleDefectAdapter extends RecyclerView.Adapter<SimpleDefectAdapter.DefectViewHolder> {
 
-    private List<Defect> defectList;
+    private final List<String> defectItems;
 
-    public DefectAdapter(List<Defect> defectList) {
-        this.defectList = defectList;
+    public SimpleDefectAdapter(List<String> defectItems) {
+        this.defectItems = defectItems;
     }
 
     @NonNull
@@ -31,18 +30,15 @@ public class DefectAdapter extends RecyclerView.Adapter<DefectAdapter.DefectView
 
     @Override
     public void onBindViewHolder(@NonNull DefectViewHolder holder, int position) {
-        Defect defect = defectList.get(position);
-
-        String defectText = "Defect: " + defect.getDescription() + "\nSeverity: " + defect.getSeverity();
-        holder.tvDefectItem.setText(defectText);
+        holder.tvDefectItem.setText(defectItems.get(position));
     }
 
     @Override
     public int getItemCount() {
-        return defectList == null ? 0 : defectList.size();
+        return defectItems.size();
     }
 
-    public static class DefectViewHolder extends RecyclerView.ViewHolder {
+    static class DefectViewHolder extends RecyclerView.ViewHolder {
 
         TextView tvDefectItem;
 

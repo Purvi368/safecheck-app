@@ -13,45 +13,40 @@ import com.safecheck.app.data.SafetyCheck;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-public class SafetyCheckAdapter extends RecyclerView.Adapter<SafetyCheckAdapter.SafetyCheckViewHolder> {
+public class SafetyCheckAdapter extends RecyclerView.Adapter<SafetyCheckAdapter.ViewHolder> {
+
+    private final List<SafetyCheck> safetyChecks = new ArrayList<>();
+    private final OnItemClickListener listener;
 
     public interface OnItemClickListener {
         void onItemClick(SafetyCheck safetyCheck);
     }
 
-    private List<SafetyCheck> safetyChecks = new ArrayList<>();
-    private final Map<Integer, Integer> defectCounts;
-    private final OnItemClickListener listener;
-
-    public SafetyCheckAdapter(Map<Integer, Integer> defectCounts, OnItemClickListener listener) {
-        this.defectCounts = defectCounts;
+    public SafetyCheckAdapter(OnItemClickListener listener) {
         this.listener = listener;
     }
 
-    public void setSafetyChecks(List<SafetyCheck> safetyChecks) {
-        this.safetyChecks = safetyChecks;
+    public void setChecks(List<SafetyCheck> checks) {
+        safetyChecks.clear();
+        if (checks != null) {
+            safetyChecks.addAll(checks);
+        }
         notifyDataSetChanged();
     }
 
     @NonNull
     @Override
-    public SafetyCheckViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_safety_check, parent, false);
-        return new SafetyCheckViewHolder(view);
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(parent.getContext())
+                .inflate(R.layout.item_safety_check, parent, false);
+        return new ViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(@NonNull SafetyCheckViewHolder holder, int position) {
-        SafetyCheck current = safetyChecks.get(position);
-        holder.tvDate.setText(current.getDate());
-        holder.tvVehicleReg.setText(current.getVehicleRegistration());
-
-        int count = defectCounts.containsKey(current.getCheckId()) ? defectCounts.get(current.getCheckId()) : 0;
-        holder.tvDefectCount.setText(count + " Defects");
-
-        holder.itemView.setOnClickListener(v -> listener.onItemClick(current));
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        SafetyCheck safetyCheck = safetyChecks.get(position);
+        holder.bind(safetyCheck, listener);
     }
 
     @Override
@@ -59,14 +54,52 @@ public class SafetyCheckAdapter extends RecyclerView.Adapter<SafetyCheckAdapter.
         return safetyChecks.size();
     }
 
-    static class SafetyCheckViewHolder extends RecyclerView.ViewHolder {
-        TextView tvDate, tvVehicleReg, tvDefectCount;
+    static class ViewHolder extends RecyclerView.ViewHolder {
 
-        public SafetyCheckViewHolder(@NonNull View itemView) {
+        private final TextView tvVehicleReg;
+        private final TextView tvDate;
+        private final TextView tvDefectCount;
+        private final TextView tvViewDetails;
+
+        public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            tvDate = itemView.findViewById(R.id.tvDate);
             tvVehicleReg = itemView.findViewById(R.id.tvVehicleReg);
+            tvDate = itemView.findViewById(R.id.tvDate);
             tvDefectCount = itemView.findViewById(R.id.tvDefectCount);
+            tvViewDetails = itemView.findViewById(R.id.tvViewDetails);
+        }
+
+        public void bind(SafetyCheck safetyCheck, OnItemClickListener listener) {
+            tvVehicleReg.setText("Vehicle: " + safeText(safetyCheck.getVehicleRegistration()));
+            tvDate.setText("Date: " + safeText(safetyCheck.getDate()));
+
+            String status = safetyCheck.getOverallStatus();
+            if (status == null || status.trim().isEmpty()) {
+                status = "Pending";
+            }
+
+            tvDefectCount.setText("Status: " + status);
+
+            if (status.equalsIgnoreCase("Pass")) {
+                tvDefectCount.setTextColor(itemView.getContext().getColor(R.color.statusPassText));
+                tvViewDetails.setText("Tap to view defects →");
+            } else if (status.equalsIgnoreCase("Fail")) {
+                tvDefectCount.setTextColor(itemView.getContext().getColor(R.color.statusFailText));
+                tvViewDetails.setText("Tap to view defects →");
+            } else {
+                tvDefectCount.setTextColor(itemView.getContext().getColor(R.color.textPrimary));
+                tvViewDetails.setText("Tap to view inspection details →");
+            }
+
+            itemView.setOnClickListener(v -> {
+                if (listener != null) {
+                    listener.onItemClick(safetyCheck);
+                }
+            });
+        }
+
+        private String safeText(String value) {
+            return value == null || value.trim().isEmpty() ? "N/A" : value;
         }
     }
 }
