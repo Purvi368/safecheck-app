@@ -134,9 +134,9 @@ public class DetailActivity extends AppCompatActivity {
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, bodyBuilder.toString());
 
-        if (emailIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(emailIntent);
-        } else {
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send Email Report"));
+        } catch (Exception e) {
             Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
         }
     }
