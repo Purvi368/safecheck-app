@@ -1,10 +1,8 @@
 package com.safecheck.app.activities;
 
-import com.safecheck.app.adapters.SimpleDefectAdapter;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,6 +14,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.safecheck.app.R;
+import com.safecheck.app.adapters.SimpleDefectAdapter;
 import com.safecheck.app.data.Defect;
 import com.safecheck.app.data.SafetyCheck;
 import com.safecheck.app.viewmodel.SafetyCheckViewModel;
@@ -50,7 +49,6 @@ public class DetailActivity extends AppCompatActivity {
         recyclerViewDefects.setLayoutManager(new LinearLayoutManager(this));
 
         viewModel = new ViewModelProvider(this).get(SafetyCheckViewModel.class);
-
         checkId = getIntent().getIntExtra("checkId", -1);
 
         if (checkId == -1) {
@@ -128,7 +126,7 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         StringBuilder body = new StringBuilder();
-        body.append("Safety Check Report\n\n");
+        body.append("Safety Defect Report\n\n");
         body.append("Vehicle: ").append(vehicle).append("\n");
         body.append("Date: ").append(date).append("\n\n");
         body.append("Defects:\n");
@@ -137,22 +135,25 @@ public class DetailActivity extends AppCompatActivity {
             body.append("No defects recorded.");
         } else {
             for (Defect defect : defects) {
+                String description = defect.getDescription() == null ? "" : defect.getDescription();
+                String severity = defect.getSeverity() == null ? "" : defect.getSeverity();
+
                 body.append("- ")
-                        .append(defect.getDescription())
+                        .append(description)
                         .append(" (")
-                        .append(defect.getSeverity())
+                        .append(severity)
                         .append(")\n");
             }
         }
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse("mailto:"));
-        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Safety Check Report");
+        emailIntent.setData(Uri.parse("mailto:test@example.com"));
+        emailIntent.putExtra(Intent.EXTRA_SUBJECT, "Safety Defect Report: " + vehicle);
         emailIntent.putExtra(Intent.EXTRA_TEXT, body.toString());
 
-        if (emailIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(emailIntent);
-        } else {
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send Email Report"));
+        } catch (Exception e) {
             Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
         }
     }
