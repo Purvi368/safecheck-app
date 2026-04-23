@@ -9,7 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.safecheck.app.R;
-import com.safecheck.app.model.SafetyCheck;
+import com.safecheck.app.data.SafetyCheck;
 
 import java.util.ArrayList;
 import java.util.List;

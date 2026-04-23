@@ -14,10 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.safecheck.app.R;
 import com.safecheck.app.adapters.DefectAdapter;
-import com.safecheck.app.model.Defect;
-import com.safecheck.app.model.SafetyCheck;
+import com.safecheck.app.data.Defect;
+import com.safecheck.app.data.SafetyCheck;
 import com.safecheck.app.viewmodel.SafetyCheckViewModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class DetailActivity extends AppCompatActivity {
@@ -25,15 +26,19 @@ public class DetailActivity extends AppCompatActivity {
     private int checkId;
     private SafetyCheckViewModel viewModel;
     private SafetyCheck currentCheck;
-    private List<Defect> currentDefects;
+    private List<Defect> currentDefects = new ArrayList<>();
+    private DefectAdapter defectAdapter;
+
+    private TextView tvDetailDate;
+    private TextView tvDetailVehicle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_detail);
 
-        TextView tvDetailDate = findViewById(R.id.tvDetailDate);
-        TextView tvDetailVehicle = findViewById(R.id.tvDetailVehicle);
+        tvDetailDate = findViewById(R.id.tvDetailDate);
+        tvDetailVehicle = findViewById(R.id.tvDetailVehicle);
         RecyclerView recyclerViewDefects = findViewById(R.id.recyclerViewDefects);
         Button btnEmailReport = findViewById(R.id.btnEmailReport);
         Button btnDeleteCheck = findViewById(R.id.btnDeleteCheck);
@@ -49,23 +54,11 @@ public class DetailActivity extends AppCompatActivity {
 
         viewModel = new ViewModelProvider(this).get(SafetyCheckViewModel.class);
 
-        currentCheck = viewModel.getCheckById(checkId);
-
-        if (currentCheck == null) {
-            Toast.makeText(this, "Safety check not found", Toast.LENGTH_SHORT).show();
-            finish();
-            return;
-        }
-
-        tvDetailDate.setText("Date: " + currentCheck.getDate());
-        tvDetailVehicle.setText("Vehicle: " + currentCheck.getVehicleRegistration());
-
         recyclerViewDefects.setLayoutManager(new LinearLayoutManager(this));
-        DefectAdapter defectAdapter = new DefectAdapter();
+        defectAdapter = new DefectAdapter();
         recyclerViewDefects.setAdapter(defectAdapter);
 
-        currentDefects = viewModel.getDefectsForCheck(checkId);
-        defectAdapter.setDefects(currentDefects);
+        loadCheckData();
 
         btnEmailReport.setOnClickListener(v -> sendEmailReport());
 
@@ -82,7 +75,41 @@ public class DetailActivity extends AppCompatActivity {
         });
     }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+        loadCheckData();
+    }
+
+    private void loadCheckData() {
+        viewModel.getCheckById(checkId).observe(this, check -> {
+            if (check == null) {
+                Toast.makeText(this, "Safety check not found", Toast.LENGTH_SHORT).show();
+                finish();
+                return;
+            }
+
+            currentCheck = check;
+            tvDetailDate.setText("Date: " + currentCheck.getDate());
+            tvDetailVehicle.setText("Vehicle: " + currentCheck.getVehicleRegistration());
+        });
+
+        viewModel.getDefectsForCheck(checkId).observe(this, defects -> {
+            if (defects == null) {
+                currentDefects = new ArrayList<>();
+            } else {
+                currentDefects = defects;
+            }
+            defectAdapter.setDefects(currentDefects);
+        });
+    }
+
     private void sendEmailReport() {
+        if (currentCheck == null) {
+            Toast.makeText(this, "Safety check not loaded yet", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
         String subject = "Safety Defect Report: " + currentCheck.getVehicleRegistration();
 
         StringBuilder bodyBuilder = new StringBuilder();
