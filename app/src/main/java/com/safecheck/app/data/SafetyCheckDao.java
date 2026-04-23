@@ -20,9 +20,18 @@ public interface SafetyCheckDao {
     @Query("SELECT * FROM SafetyCheck")
     List<SafetyCheck> getAllSafetyChecks();
 
+    @Query("SELECT * FROM SafetyCheck WHERE checkId = :checkId LIMIT 1")
+    SafetyCheck getCheckById(int checkId);
+
+    @Query("SELECT * FROM Defect WHERE checkOwnerId = :checkId")
+    List<Defect> getDefectsForCheck(int checkId);
+
+    @Query("SELECT COUNT(*) FROM Defect WHERE checkOwnerId = :checkId")
+    int getDefectCountForCheck(int checkId);
+
     @Transaction
-    @Query("SELECT * FROM SafetyCheck WHERE checkId = :id")
-    SafetyCheckWithDefects getSafetyCheckWithDefects(int id);
+    @Query("SELECT * FROM SafetyCheck WHERE checkId = :checkId")
+    SafetyCheckWithDefects getSafetyCheckWithDefects(int checkId);
 
     @Delete
     void deleteSafetyCheck(SafetyCheck safetyCheck);

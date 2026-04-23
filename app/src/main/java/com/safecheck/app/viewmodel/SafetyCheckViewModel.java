@@ -1,28 +1,45 @@
 package com.safecheck.app.viewmodel;
 
-import androidx.lifecycle.LiveData;
-import androidx.lifecycle.ViewModel;
+import android.app.Application;
 
-import com.safecheck.app.model.Defect;
-import com.safecheck.app.model.SafetyCheck;
-import com.safecheck.app.repository.SafetyRepository;
+import androidx.annotation.NonNull;
+import androidx.lifecycle.AndroidViewModel;
+import androidx.lifecycle.LiveData;
+
+import com.safecheck.app.data.Defect;
+import com.safecheck.app.data.SafetyCheck;
+import com.safecheck.app.data.SafetyCheckWithDefects;
+import com.safecheck.app.data.SafetyRepository;
 
 import java.util.List;
 
-public class SafetyCheckViewModel extends ViewModel {
+public class SafetyCheckViewModel extends AndroidViewModel {
 
-    private final SafetyRepository repository = SafetyRepository.getInstance();
+    private final SafetyRepository repository;
+
+    public SafetyCheckViewModel(@NonNull Application application) {
+        super(application);
+        repository = SafetyRepository.getInstance(application);
+    }
 
     public LiveData<List<SafetyCheck>> getAllChecks() {
         return repository.getAllChecks();
     }
 
-    public SafetyCheck getCheckById(int checkId) {
+    public LiveData<SafetyCheck> getCheckById(int checkId) {
         return repository.getCheckById(checkId);
     }
 
-    public List<Defect> getDefectsForCheck(int checkId) {
+    public LiveData<List<Defect>> getDefectsForCheck(int checkId) {
         return repository.getDefectsForCheck(checkId);
+    }
+
+    public LiveData<Integer> getDefectCountForCheck(int checkId) {
+        return repository.getDefectCountForCheck(checkId);
+    }
+
+    public LiveData<SafetyCheckWithDefects> getSafetyCheckWithDefects(int checkId) {
+        return repository.getSafetyCheckWithDefects(checkId);
     }
 
     public void addSafetyCheck(String date, String vehicleRegistration) {
@@ -35,9 +52,5 @@ public class SafetyCheckViewModel extends ViewModel {
 
     public void deleteSafetyCheck(int checkId) {
         repository.deleteSafetyCheck(checkId);
-    }
-
-    public int getDefectCountForCheck(int checkId) {
-        return repository.getDefectCountForCheck(checkId);
     }
 }

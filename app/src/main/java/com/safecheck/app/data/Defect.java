@@ -21,4 +21,37 @@ public class Defect {
     public String severity;
 
     public int checkOwnerId;
+
+    public int getDefectId() {
+        return defectId;
+    }
+
+    public void setDefectId(int defectId) {
+        this.defectId = defectId;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getSeverity() {
+        return severity;
+    }
+
+    public void setSeverity(String severity) {
+        this.severity = severity;
+    }
+
+    // IMPORTANT: UI expects getCheckId(), not checkOwnerId
+    public int getCheckId() {
+        return checkOwnerId;
+    }
+
+    public void setCheckId(int checkId) {
+        this.checkOwnerId = checkId;
+    }
 }
