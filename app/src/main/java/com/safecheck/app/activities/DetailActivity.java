@@ -113,8 +113,10 @@ public class DetailActivity extends AppCompatActivity {
         String subject = "Safety Defect Report: " + currentCheck.getVehicleRegistration();
 
         StringBuilder bodyBuilder = new StringBuilder();
-        bodyBuilder.append("Vehicle Registration: ").append(currentCheck.getVehicleRegistration()).append("\n");
-        bodyBuilder.append("Date: ").append(currentCheck.getDate()).append("\n\n");
+        bodyBuilder.append("Vehicle Registration: ")
+                .append(currentCheck.getVehicleRegistration()).append("\n");
+        bodyBuilder.append("Date: ")
+                .append(currentCheck.getDate()).append("\n\n");
         bodyBuilder.append("Defects:\n");
 
         if (currentDefects == null || currentDefects.isEmpty()) {
@@ -130,13 +132,14 @@ public class DetailActivity extends AppCompatActivity {
         }
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
-        emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.setData(Uri.parse("mailto:test@example.com")); // <-- important change
+
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, bodyBuilder.toString());
 
-        if (emailIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(emailIntent);
-        } else {
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send Email Report"));
+        } catch (Exception e) {
             Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
         }
     }
