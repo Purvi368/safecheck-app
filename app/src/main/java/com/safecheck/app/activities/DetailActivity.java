@@ -103,7 +103,6 @@ public class DetailActivity extends AppCompatActivity {
             defectAdapter.setDefects(currentDefects);
         });
     }
-
     private void sendEmailReport() {
         if (currentCheck == null) {
             Toast.makeText(this, "Safety check not loaded yet", Toast.LENGTH_SHORT).show();
@@ -131,13 +130,15 @@ public class DetailActivity extends AppCompatActivity {
 
         Intent emailIntent = new Intent(Intent.ACTION_SENDTO);
         emailIntent.setData(Uri.parse("mailto:"));
+        emailIntent.putExtra(Intent.EXTRA_EMAIL, new String[]{"test@example.com"});
         emailIntent.putExtra(Intent.EXTRA_SUBJECT, subject);
         emailIntent.putExtra(Intent.EXTRA_TEXT, bodyBuilder.toString());
 
-        if (emailIntent.resolveActivity(getPackageManager()) != null) {
-            startActivity(emailIntent);
-        } else {
+        try {
+            startActivity(Intent.createChooser(emailIntent, "Send Email"));
+        } catch (android.content.ActivityNotFoundException e) {
             Toast.makeText(this, "No email app found", Toast.LENGTH_SHORT).show();
         }
     }
+
 }
